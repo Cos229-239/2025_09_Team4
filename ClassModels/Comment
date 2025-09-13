@@ -1,0 +1,12 @@
+import java.util.*
+
+//User Comment
+data class Comment(
+    val id: String = UUID.randomUUID().toString(),
+    val postID: String = "",
+    val userID: String = "",
+    val username: String = "",
+    val userAvatarUrl: String? = null,
+    val content: String = "",
+    val timestamp: Long = System.currentTimeMillis()
+    )

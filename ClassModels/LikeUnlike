@@ -1,0 +1,16 @@
+//Class
+data class Post(
+    val id: String,
+    val content: String,
+    val likedBy : MutableList<String> = mutableListOf()
+    )
+
+//Toggle
+fun toggleLike(post: Post, userId: String): Post{
+    if (post.likeBy.contains(userId) {
+        post.likedBy.remove(userId)
+    } else {
+        post.likeBy.add(userId)
+      }
+      return post
+}
