@@ -1,0 +1,67 @@
+package com.kodeco.memeverse.composables
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import com.kodeco.memeverse.R
+import com.kodeco.memeverse.ui.theme.MemeVerseTheme
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBar() {
+    MemeVerseTheme {
+
+    Scaffold(
+        topBar = { // It's a common convention to place the lambda on a new line
+            TopAppBar(
+                title = {
+                    Image (
+                        painter = painterResource(id = R.drawable.memeverse),
+                        contentDescription = "MemeVerse Logo",
+                        modifier = Modifier,
+                        contentScale = ContentScale.Crop
+                    )
+                },
+                actions = {
+                    IconButton(onClick = {/* TODO: handle notification bell click */ }) {
+                        Icon(
+                            imageVector = Icons.Filled.Notifications,
+                            contentDescription = "Notifications",
+                            tint = MaterialTheme.colorScheme.surface
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            )
+        },
+        // This is the content parameter that was missing
+        content = { innerPadding ->
+            // You had this Text composable inside the Scaffold's content lambda already,
+            // but the content parameter itself was missing from Scaffold.
+            Text(text = "Feed Screen", modifier = Modifier.padding(innerPadding))
+        }
+    )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewTopAppBar() {
+    TopAppBar()
+}

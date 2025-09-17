@@ -18,7 +18,7 @@ import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBarNavigation(
+fun TopBarNavigationDetail(
     navigateBack: () -> Unit,
 ) {
     MemeVerseTheme {
@@ -58,5 +58,5 @@ fun TopBarNavigation(
 @Preview
 @Composable
 fun PreviewTopBarNavigation() {
-    TopBarNavigation {  }
+    TopBarNavigationDetail {  }
 }

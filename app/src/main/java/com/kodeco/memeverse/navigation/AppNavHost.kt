@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.kodeco.memeverse.composables.TopBarNavigation
+import com.kodeco.memeverse.composables.TopBarNavigationDetail
 import com.kodeco.memeverse.screens.FeedScreen
 import com.kodeco.memeverse.screens.LoginScreen
 import com.kodeco.memeverse.screens.SignupScreen
@@ -15,7 +15,7 @@ fun AppNavHost(navController: NavHostController) {
         composable("login") { LoginScreen(navController) }
         composable("signup") { SignupScreen(navController) }
         composable("topBarNavigation") {
-            TopBarNavigation { navController.popBackStack() }
+            TopBarNavigationDetail { navController.popBackStack() }
         }
         composable("feed") { FeedScreen(navController) }
     }
