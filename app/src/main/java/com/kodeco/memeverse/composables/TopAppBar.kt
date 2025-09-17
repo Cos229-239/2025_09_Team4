@@ -1,6 +1,8 @@
 package com.kodeco.memeverse.composables
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -9,7 +11,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ fun TopAppBar() {
     MemeVerseTheme {
 
     Scaffold(
-        topBar = { // It's a common convention to place the lambda on a new line
+        topBar = {
             TopAppBar(
                 title = {
                     Image (
@@ -50,11 +51,13 @@ fun TopAppBar() {
                 )
             )
         },
-        // This is the content parameter that was missing
         content = { innerPadding ->
-            // You had this Text composable inside the Scaffold's content lambda already,
-            // but the content parameter itself was missing from Scaffold.
-            Text(text = "Feed Screen", modifier = Modifier.padding(innerPadding))
+            Column(modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxWidth())
+            {
+                // Screen content will go here.
+            }
         }
     )
     }
