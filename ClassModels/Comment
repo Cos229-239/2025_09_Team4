@@ -1,5 +1,13 @@
 import java.util.*
 
+//User
+data class User(
+    val id: String = UUID.randomUUID().toString(),
+    val username: String,
+    val password: String,
+    val avatarUrl: String? = null
+)
+
 //User Comment
 data class Comment(
     val id: String = UUID.randomUUID().toString(),
@@ -9,4 +17,13 @@ data class Comment(
     val userAvatarUrl: String? = null,
     val content: String = "",
     val timestamp: Long = System.currentTimeMillis()
+){
+    //Constructor to create Comment User Object
+    constructor(postID: String, user: User, content: String) : this(
+        postID = postID,
+        userID  = user.id,
+        username = user.username,
+        userAvatarUrl = user.avatarUrl,
+        content = content
     )
+}
