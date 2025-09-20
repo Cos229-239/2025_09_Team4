@@ -10,7 +10,6 @@
 .cxx
 local.properties
 
-
 # Ignore all files in the .idea folder
 .idea/
 
