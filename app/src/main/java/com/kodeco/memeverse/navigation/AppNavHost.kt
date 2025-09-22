@@ -1,5 +1,6 @@
 package com.kodeco.memeverse.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,7 +15,7 @@ import com.kodeco.memeverse.screens.SignupScreen
 import com.kodeco.memeverse.screens.TrendingScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController) {
+fun AppNavHost(navController: NavHostController, padding: PaddingValues) {
     NavHost(navController = navController, startDestination = "login") {
         composable("login") { LoginScreen(navController) }
         composable("signup") { SignupScreen(navController) }
