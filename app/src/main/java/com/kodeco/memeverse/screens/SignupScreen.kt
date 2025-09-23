@@ -59,7 +59,7 @@ fun SignupScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
         Image(
-            painter = painterResource(id = R.drawable.mv_logo),
+            painter = painterResource(id = R.drawable.memeverse),
             contentDescription = "App Logo",
             modifier = Modifier
                 .size(150.dp)

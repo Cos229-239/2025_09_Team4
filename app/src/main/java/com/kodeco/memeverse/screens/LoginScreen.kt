@@ -56,7 +56,7 @@ fun LoginScreen(navController: NavController) {
 
 
         Image(
-            painter = painterResource(id = R.drawable.mv_logo),
+            painter = painterResource(id = R.drawable.memeverse),
             contentDescription = "App Logo",
             modifier = Modifier
                 .size(150.dp)
@@ -133,9 +133,8 @@ fun LoginScreen(navController: NavController) {
 
         Button(
 
-            onClick = {
-                onClick = { navController.navigate(route = ("feed")) },
-            },
+            onClick = { navController.navigate(route = ("feed")) },
+
             enabled = isLoginEnabled,
             modifier = Modifier
                 .fillMaxWidth()
