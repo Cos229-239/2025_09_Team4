@@ -1,0 +1,24 @@
+import java.util.*
+
+//Class
+data class Post(
+    val id: String = UUID.randomUUID().toString(),
+    val content: String,
+    val imageUrl: String? = null,
+    val isTaggable: Boolean = false,
+    val tags: List<String> = listOf(),
+    val likedBy : MutableList<String> = mutableListOf()
+){
+    val likes: Int
+        get() = likedBy.size
+}
+
+//Toggle
+fun toggleLike(post: Post, userId: String): Post{
+    if (post.likeBy.contains(userId) {
+        post.likedBy.remove(userId)
+    } else {
+        post.likeBy.add(userId)
+      }
+      return post
+}
