@@ -1,6 +1,7 @@
-import java.util.*
+package com.kodeco.memeverse.models
 
-//Class
+import java.util.UUID
+
 data class Post(
     val id: String = UUID.randomUUID().toString(),
     val content: String,
@@ -11,14 +12,4 @@ data class Post(
 ){
     val likes: Int
         get() = likedBy.size
-}
-
-//Toggle
-fun toggleLike(post: Post, userId: String): Post{
-    if (post.likeBy.contains(userId) {
-        post.likedBy.remove(userId)
-    } else {
-        post.likeBy.add(userId)
-      }
-      return post
 }

@@ -1,12 +1,6 @@
-import java.util.*
+package com.kodeco.memeverse.models
 
-//User
-data class User(
-    val id: String = UUID.randomUUID().toString(),
-    val username: String,
-    val password: String,
-    val avatarUrl: String? = null
-)
+import java.util.UUID
 
 //User Comment
 data class Comment(
