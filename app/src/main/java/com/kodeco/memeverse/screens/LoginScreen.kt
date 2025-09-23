@@ -132,12 +132,9 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(24.dp))
 
         Button(
+
             onClick = {
-                if (username == "JoeSmith" && password == "Password123!") {
-                    navController.navigate("HomeScreen")
-                } else {
-                    showError = true
-                }
+                onClick = { navController.navigate(route = ("feed")) },
             },
             enabled = isLoginEnabled,
             modifier = Modifier
@@ -148,6 +145,7 @@ fun LoginScreen(navController: NavController) {
                 disabledContainerColor = Color(0xFFB2EBF2)
             ),
             shape = MaterialTheme.shapes.large
+
         ) {
             Text("Log In", color = Color.White)
         }
