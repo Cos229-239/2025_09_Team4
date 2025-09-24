@@ -12,7 +12,6 @@ import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 @Composable
 fun FeedScreen(navController: NavController) {
     MemeVerseTheme {
-        TopAppBar()
         Scaffold(
             topBar = { TopAppBar() },
         ) { innerPadding ->
