@@ -11,7 +11,7 @@ import com.kodeco.memeverse.screens.FeedScreen
 import com.kodeco.memeverse.screens.GeneratorScreen
 import com.kodeco.memeverse.screens.LoginScreen
 import com.kodeco.memeverse.screens.ProfileScreen
-import com.kodeco.memeverse.screens.SignupScreen
+import com.kodeco.memeverse.screens.signup.SignupScreen
 import com.kodeco.memeverse.screens.TrendingScreen
 
 @Composable

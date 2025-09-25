@@ -1,5 +1,6 @@
-package com.kodeco.memeverse.screens
+package com.kodeco.memeverse.screens.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,17 +23,23 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kodeco.memeverse.R
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun SignupScreen(navController: NavController) {
+fun SignupScreen(
+    navController: NavController,
+    signUpViewModel: SignUpViewModel = viewModel()
+) {
     var email by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
-
+    // Get context to show toasts
+    val context = LocalContext.current
     val passwordsMatch = password == confirmPassword
     val isSignupEnabled = email.isNotBlank() && username.isNotBlank() &&
             password.isNotBlank() && confirmPassword.isNotBlank() && passwordsMatch
@@ -162,7 +169,27 @@ fun SignupScreen(navController: NavController) {
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { navController.navigate("login") },
+            onClick = {
+                signUpViewModel.createAccount(email, password) { isSuccess, errorMessage ->
+                    if (isSuccess) {
+                        Toast.makeText(
+                            context,
+                            "Account successfully created",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                        navController.navigate("feed") {
+                            // Clear the backstack
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            errorMessage,
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            },
             enabled = isSignupEnabled,
             modifier = Modifier
                 .fillMaxWidth()
