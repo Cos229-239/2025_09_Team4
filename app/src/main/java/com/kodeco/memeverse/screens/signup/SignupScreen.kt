@@ -1,5 +1,6 @@
-package com.kodeco.memeverse.screens
+package com.kodeco.memeverse.screens.signup
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,15 +23,26 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kodeco.memeverse.R
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun SignupScreen(
+    navController: NavController,
+    signUpViewModel: SignUpViewModel = viewModel()
+) {
+    var email by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
-    var showError by remember { mutableStateOf(false) }
-
-    val isLoginEnabled = username.isNotBlank() && password.isNotBlank()
+    var showConfirmPassword by remember { mutableStateOf(false) }
+    // Get context to show toasts
+    val context = LocalContext.current
+    val passwordsMatch = password == confirmPassword
+    val isSignupEnabled = email.isNotBlank() && username.isNotBlank() &&
+            password.isNotBlank() && confirmPassword.isNotBlank() && passwordsMatch
 
     Row(
         modifier = Modifier
@@ -53,8 +65,6 @@ fun LoginScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-
         Image(
             painter = painterResource(id = R.drawable.memeverse),
             contentDescription = "App Logo",
@@ -62,39 +72,52 @@ fun LoginScreen(navController: NavController) {
                 .size(150.dp)
                 .padding(bottom = 16.dp)
         )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Sign up to share and store all your favorite memes",
+                        color = Color.White,
+                        textAlign = TextAlign.Center
+                    )
+                }
 
         Spacer(Modifier.height(32.dp))
 
         TextField(
+            value = email,
+            onValueChange = { email = it },
+            placeholder = { Text("Email") },
+            singleLine = true,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
+            shape = MaterialTheme.shapes.extraLarge,
+            colors = textFieldColors()
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        TextField(
             value = username,
-            onValueChange = {
-                username = it
-                showError = false
-            },
+            onValueChange = { username = it },
             placeholder = { Text("Username") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
             shape = MaterialTheme.shapes.extraLarge,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
+            colors = textFieldColors()
         )
 
         Spacer(Modifier.height(16.dp))
 
         TextField(
             value = password,
-            onValueChange = {
-                password = it
-                showError = false
-            },
+            onValueChange = { password = it },
             placeholder = { Text("Password") },
             singleLine = true,
             visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
@@ -108,20 +131,34 @@ fun LoginScreen(navController: NavController) {
                 .fillMaxWidth()
                 .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
             shape = MaterialTheme.shapes.extraLarge,
-            isError = showError,
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                disabledContainerColor = Color.White,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            )
+            colors = textFieldColors()
         )
 
-        if (showError) {
+        Spacer(Modifier.height(16.dp))
+
+        TextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            placeholder = { Text("Confirm Password") },
+            singleLine = true,
+            visualTransformation = if (showConfirmPassword) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val icon = if (showConfirmPassword) Icons.Default.VisibilityOff else Icons.Default.Visibility
+                IconButton(onClick = { showConfirmPassword = !showConfirmPassword }) {
+                    Icon(icon, contentDescription = null)
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
+            shape = MaterialTheme.shapes.extraLarge,
+            isError = confirmPassword.isNotBlank() && !passwordsMatch,
+            colors = textFieldColors()
+        )
+
+        if (confirmPassword.isNotBlank() && !passwordsMatch) {
             Text(
-                "Username or password is incorrect",
+                "Passwords do not match",
                 color = Color.Red,
                 modifier = Modifier
                     .align(Alignment.Start)
@@ -132,10 +169,28 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(24.dp))
 
         Button(
-
-            onClick = { navController.navigate(route = ("feed")) },
-
-            enabled = isLoginEnabled,
+            onClick = {
+                signUpViewModel.createAccount(email, password) { isSuccess, errorMessage ->
+                    if (isSuccess) {
+                        Toast.makeText(
+                            context,
+                            "Account successfully created",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                        navController.navigate("feed") {
+                            // Clear the backstack
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            errorMessage,
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            },
+            enabled = isSignupEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
@@ -144,36 +199,29 @@ fun LoginScreen(navController: NavController) {
                 disabledContainerColor = Color(0xFFB2EBF2)
             ),
             shape = MaterialTheme.shapes.large
-
         ) {
-            Text("Log In", color = Color.White)
+            Text("Sign Up", color = Color.White)
         }
 
         Spacer(Modifier.height(16.dp))
-
-        TextButton(onClick = { /* Handle forgot password */ }) {
-            Text("Forgot Password?", color = Color.White)
-        }
-
-        Spacer(Modifier.height(8.dp))
 
         val interactionSource = remember { MutableInteractionSource() }
         val isPressed by interactionSource.collectIsPressedAsState()
         val animatedColor by animateColorAsState(
             targetValue = if (isPressed) Color.White else Color(0xFFB2EBF2),
-            label = "SignUpLinkColor"
+            label = "LoginLinkColor"
         )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("Not a member yet?", color = Color.White)
+            Text("Already have an account?", color = Color.White)
             Spacer(Modifier.width(4.dp))
             TextButton(
-                onClick = { navController.navigate("signup") },
+                onClick = { navController.navigate("login") },
                 interactionSource = interactionSource,
                 contentPadding = PaddingValues(0.dp)
             ) {
                 Text(
-                    "Sign Up",
+                    "Login",
                     color = Color(0xFFFF5722),
                     style = TextStyle(
                         textDecoration = if (isPressed) TextDecoration.Underline else TextDecoration.None
@@ -191,5 +239,14 @@ fun LoginScreen(navController: NavController) {
         )
     }
 
-
 }
+
+@Composable
+private fun textFieldColors(): TextFieldColors = TextFieldDefaults.colors(
+    focusedContainerColor = Color.White,
+    unfocusedContainerColor = Color.White,
+    disabledContainerColor = Color.White,
+    focusedIndicatorColor = Color.Transparent,
+    unfocusedIndicatorColor = Color.Transparent,
+    disabledIndicatorColor = Color.Transparent
+)

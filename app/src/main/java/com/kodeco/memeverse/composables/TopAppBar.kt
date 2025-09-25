@@ -42,7 +42,7 @@ fun TopAppBar() {
                         Icon(
                             imageVector = Icons.Filled.Notifications,
                             contentDescription = "Notifications",
-                            tint = MaterialTheme.colorScheme.surface
+                            tint = MaterialTheme.colorScheme.onPrimary
                         )
                     }
                 },
