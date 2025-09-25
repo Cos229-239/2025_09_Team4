@@ -9,6 +9,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+google-services.json
 
 # Ignore all files in the .idea folder
 .idea/
