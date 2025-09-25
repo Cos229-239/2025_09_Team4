@@ -1,5 +1,6 @@
-package com.kodeco.memeverse.screens
+package com.kodeco.memeverse.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -22,15 +23,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.kodeco.memeverse.R
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun LoginScreen(navController: NavController) {
-    var username by remember { mutableStateOf("") }
+fun LoginScreen(
+    navController: NavController,
+    loginViewModel : LoginViewModel = viewModel()
+) {
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
     var showError by remember { mutableStateOf(false) }
+    // Get context to show toasts
+    val context = LocalContext.current
 
-    val isLoginEnabled = username.isNotBlank() && password.isNotBlank()
+    val isLoginEnabled = email.isNotBlank() && password.isNotBlank()
 
     Row(
         modifier = Modifier
@@ -66,12 +74,12 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(32.dp))
 
         TextField(
-            value = username,
+            value = email,
             onValueChange = {
-                username = it
+                email = it
                 showError = false
             },
-            placeholder = { Text("Username") },
+            placeholder = { Text("Email") },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
@@ -133,8 +141,27 @@ fun LoginScreen(navController: NavController) {
 
         Button(
 
-            onClick = { navController.navigate(route = ("feed")) },
-
+            onClick = {
+                loginViewModel.signIn(email, password) { isSuccess, errorMessage ->
+                    if (isSuccess) {
+                        Toast.makeText(
+                            context,
+                            "Signed in successfully",
+                            Toast.LENGTH_SHORT)
+                            .show()
+                        navController.navigate("feed") {
+                            // Clear the backstack
+                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        }
+                    } else {
+                        Toast.makeText(
+                            context,
+                            errorMessage,
+                            Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            },
             enabled = isLoginEnabled,
             modifier = Modifier
                 .fillMaxWidth()
