@@ -40,7 +40,9 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(24.dp))
 
         Button(
-            onClick = { /* TODO: Handle login */ },
+            onClick = { navController.navigate("feed") {
+                popUpTo("login") {inclusive = true}
+            } },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Login")
