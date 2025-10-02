@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kodeco.memeverse.composables.TopBarNavigationDetail
-import com.kodeco.memeverse.screens.AddScreen
+import com.kodeco.memeverse.screens.add.AddScreen
 import com.kodeco.memeverse.screens.FeedScreen
 import com.kodeco.memeverse.screens.GeneratorScreen
 import com.kodeco.memeverse.screens.login.LoginScreen
