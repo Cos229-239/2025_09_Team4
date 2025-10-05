@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import coil.compose.rememberAsyncImagePainter
+import coil3.compose.AsyncImage
 
 //Model
 data class Post(val id: Int, val title: String, val imageUrl: String)
@@ -23,6 +23,7 @@ val dummyPosts = listOf(   //Filler for now to test
 )
 
 //Composable Function
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(navController: NavController) {
     // Screen Structure
@@ -55,13 +56,13 @@ fun FeedScreen(navController: NavController) {
 
                         Spacer(modifier = Modifier.height(8.dp)) // Space between title and image
 
-                        // Load image from URL using Coil
-                        Image(
-                            painter = rememberAsyncImagePainter(post.imageUrl),
+                        // Load image using Coil
+                        AsyncImage(
+                            model = post.imageUrl,
                             contentDescription = post.title,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(200.dp) // Fixed height for images
+                                .height(200.dp)
                         )
                     }
                 }
