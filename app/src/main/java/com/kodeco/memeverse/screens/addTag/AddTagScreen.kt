@@ -1,10 +1,6 @@
-package com.kodeco.memeverse.screens.add
+package com.kodeco.memeverse.screens.addTag
 
 import android.net.Uri
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,13 +33,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
@@ -50,48 +46,33 @@ import com.kodeco.memeverse.composables.TopAppBar
 import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 
 @Composable
-fun AddScreen(
+fun AddTagScreen(
     navController: NavHostController,
-    viewModel: AddViewModel = viewModel()
+    mSelectedImageUri: Uri
 ) {
-    // Hold state for the selected image URI
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    // Determine if the next button should be enabled
-    val isNextEnabled = selectedImageUri != null
+    var caption by remember { mutableStateOf("") }
+    var tags by remember { mutableStateOf("") }
     // Set the state for the dropdown menu
     val isDropdownExpanded = remember { mutableStateOf(false) }
     val options = listOf("Public", "Private")
     // set a state variable for the option position
     val itemPosition = remember { mutableStateOf(0) }
-    // Listens for the user to click on the box and opens the photo picker
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-        if (uri != null) {
-            Log.d("PhotoPicker", "Selected URI: $uri")
-            selectedImageUri = uri
-            viewModel.imageUri = uri
-        } else {
-            Log.d("PhotoPicker", "No media selected")
-        }
-    }
+
     MemeVerseTheme {
         Scaffold(
             topBar = { TopAppBar() },
         ) { innerPadding ->
-            Column (
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding),
-                horizontalAlignment =  Alignment.Start,
+                horizontalAlignment = Alignment.Start,
             ) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(400.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer)
-                        .clickable {
-                            // Launch the photo picker so the user can select a photo from their galery
-                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                        }
                 ) {
                     Box(
                         contentAlignment = Alignment.Center,
@@ -100,32 +81,48 @@ fun AddScreen(
                             .height(400.dp)
                             .background(MaterialTheme.colorScheme.primaryContainer)
                     ) {
-                        // User has not selected an image, prompt them to click the view to select one
-                        if (selectedImageUri == null) {
-                            Text(
-                                text = "Tap to select an image",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.surface
-                            )
-                        } else { // Display the users selection of an image
-                            AsyncImage(
-                                model = ImageRequest.Builder(LocalContext.current)
-                                    .data(selectedImageUri)
-                                    .crossfade(true)
-                                    .build(),
-                                contentDescription = "Selected meme",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(400.dp),
-                                contentScale = ContentScale.Crop
-                            )
-                        }
+                        // Display the users selection of an image
+                        AsyncImage(
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(mSelectedImageUri)
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "Selected meme",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(400.dp),
+                            contentScale = ContentScale.Crop
+                        )
                     }
                 }
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(2.dp, 0.dp, 10.dp, 100.dp)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(2.dp, 0.dp, 10.dp, 100.dp)
                 ) {
+                    TextField(
+                        value = caption,
+                        onValueChange = { caption = it },
+                        placeholder = { Text("Caption") },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .background(MaterialTheme.colorScheme.primaryContainer,
+                                shape = MaterialTheme.shapes.extraLarge),
+                    )
+                    TextField(
+                        value = tags,
+                        onValueChange = { tags = it },
+                        placeholder = { Text("Tags") },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 60.dp)
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .background(MaterialTheme.colorScheme.primaryContainer,
+                                shape = MaterialTheme.shapes.extraLarge),
+                    )
                     Row(
                         modifier = Modifier
                             .padding(start = 10.dp, bottom = 20.dp)
@@ -173,7 +170,6 @@ fun AddScreen(
                     }
                     Button(
                         onClick = {},
-                        enabled = isNextEnabled,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(bottom = 10.dp)
@@ -203,16 +199,13 @@ fun AddScreen(
                         color = MaterialTheme.colorScheme.primaryContainer
                     )
                 }
-
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun AddScreenPreview() {
-    MemeVerseTheme {
-        AddScreen(navController = rememberNavController())
-    }
+fun PreviewAddTagScreen() {
+    AddTagScreen(navController = NavHostController(LocalContext.current), Uri.EMPTY)
 }
