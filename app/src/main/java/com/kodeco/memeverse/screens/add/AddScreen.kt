@@ -17,10 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.PrivateConnectivity
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -129,23 +132,44 @@ fun AddScreen(
                             .border(1.dp, MaterialTheme.colorScheme.onSurface)
                             .background(MaterialTheme.colorScheme.primaryContainer)
                             .align(Alignment.BottomStart)
+                            // Enable the dropdown menu when the row is clicked
+                            .clickable {
+                                isDropdownExpanded.value = true
+                            }
                     ) {
                         Text(
-                            "Everyone",
+                            // Dynamically display the selected option, or public by default.
+                            text = (options[itemPosition.value]),
                             modifier = Modifier
                                 .padding(start = 5.dp)
-
                         )
                         Icon(
-                            imageVector = Icons.Filled.Public,
-                            contentDescription = "Public Icon",
+                            // Dynamically display the correct icon based on the selected option
+                            imageVector = if(options[itemPosition.value] == "Private") Icons.Filled.PrivateConnectivity else Icons.Filled.Public,
+                            contentDescription = "Dropdown Icon",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
                         Icon(
                             imageVector = Icons.Filled.ArrowDropDown,
                             contentDescription = "Dropdown Icon",
                             tint = MaterialTheme.colorScheme.onSurface
-                        )
+                            )
+                    }
+                    DropdownMenu(
+                        expanded = isDropdownExpanded.value,
+                        onDismissRequest = { isDropdownExpanded.value = false }
+                    ) {
+                        options.forEachIndexed { index, option ->
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = option)
+                                },
+                                onClick = {
+                                    isDropdownExpanded.value = false
+                                    itemPosition.value = index
+                                }
+                            )
+                        }
                     }
                     Button(
                         onClick = {},
@@ -169,6 +193,7 @@ fun AddScreen(
                         thickness = 1.dp,
                         color = MaterialTheme.colorScheme.primaryContainer
                     )
+                    // Horizontal divider for above the button
                     HorizontalDivider(
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
