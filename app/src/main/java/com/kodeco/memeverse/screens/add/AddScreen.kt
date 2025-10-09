@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,7 +33,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -53,6 +53,13 @@ fun AddScreen(
 ) {
     // Hold state for the selected image URI
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    // Determine if the next button should be enabled
+    val isNextEnabled = selectedImageUri != null
+    // Set the state for the dropdown menu
+    val isDropdownExpanded = remember { mutableStateOf(false) }
+    val options = listOf("Public", "Private")
+    // set a state variable for the option position
+    val itemPosition = remember { mutableStateOf(0) }
     // Listens for the user to click on the box and opens the photo picker
     val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
@@ -90,13 +97,14 @@ fun AddScreen(
                             .height(400.dp)
                             .background(MaterialTheme.colorScheme.primaryContainer)
                     ) {
+                        // User has not selected an image, prompt them to click the view to select one
                         if (selectedImageUri == null) {
                             Text(
                                 text = "Tap to select an image",
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = MaterialTheme.colorScheme.surface
                             )
-                        } else {
+                        } else { // Display the users selection of an image
                             AsyncImage(
                                 model = ImageRequest.Builder(LocalContext.current)
                                     .data(selectedImageUri)
@@ -128,22 +136,27 @@ fun AddScreen(
                                 .padding(start = 5.dp)
 
                         )
-
                         Icon(
                             imageVector = Icons.Filled.Public,
                             contentDescription = "Public Icon",
                             tint = MaterialTheme.colorScheme.onSurface
                         )
+                        Icon(
+                            imageVector = Icons.Filled.ArrowDropDown,
+                            contentDescription = "Dropdown Icon",
+                            tint = MaterialTheme.colorScheme.onSurface
+                        )
                     }
                     Button(
                         onClick = {},
+                        enabled = isNextEnabled,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(bottom = 10.dp)
                             .height(50.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(MaterialTheme.colorScheme.primary.hashCode()),
-                            disabledContainerColor = Color(0xFFB2EBF2)
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            disabledContainerColor = MaterialTheme.colorScheme.primaryContainer
                         ),
                         shape = MaterialTheme.shapes.large
                     ) {
