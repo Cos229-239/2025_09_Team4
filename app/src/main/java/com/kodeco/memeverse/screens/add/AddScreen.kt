@@ -68,7 +68,7 @@ fun AddScreen(
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
             selectedImageUri = uri
-            viewModel.imageUri = uri
+            viewModel.setImageUri(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -172,7 +172,11 @@ fun AddScreen(
                         }
                     }
                     Button(
-                        onClick = {},
+                        onClick = {
+                            if(isNextEnabled && selectedImageUri != null) {
+                                navController.navigate("addTag")
+                            }
+                        },
                         enabled = isNextEnabled,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
