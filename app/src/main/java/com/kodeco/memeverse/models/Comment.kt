@@ -1,5 +1,6 @@
 package com.kodeco.memeverse.models
 
+import coil3.Uri
 import java.util.UUID
 
 //User Comment
@@ -8,7 +9,7 @@ data class Comment(
     val postID: String = "",
     val userID: String = "",
     val username: String = "",
-    val userAvatarUrl: String? = null,
+    val userAvatarUri: String? = null,
     val content: String = "",
     val timestamp: Long = System.currentTimeMillis()
 ){
@@ -17,7 +18,7 @@ data class Comment(
         postID = postID,
         userID  = user.id,
         username = user.username,
-        userAvatarUrl = user.avatarUrl,
+        userAvatarUri = user.avatarUri,
         content = content
     )
 }

@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kodeco.memeverse.composables.TopBarNavigationDetail
 import com.kodeco.memeverse.screens.AddScreen
+import com.kodeco.memeverse.screens.EditProfileScreen
 import com.kodeco.memeverse.screens.FeedScreen
 import com.kodeco.memeverse.screens.GeneratorScreen
 import com.kodeco.memeverse.screens.login.LoginScreen
@@ -27,5 +28,6 @@ fun AppNavHost(navController: NavHostController, padding: PaddingValues) {
         composable("generator") { GeneratorScreen(navController) }
         composable("profile") { ProfileScreen(navController) }
         composable("trending") { TrendingScreen(navController) }
+        composable("editProfile") { EditProfileScreen(navController) }
     }
 }

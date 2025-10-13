@@ -5,20 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.kodeco.memeverse.authentication.AuthRepository
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
-
+class SignupViewModel : ViewModel() {
     private val authRepository = AuthRepository()
 
-    fun createAccount(email: String, password: String, onResult: (isSuccess: Boolean, errorMessage: String?)-> Unit) {
+    fun signup(email: String, password: String, username: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             try {
-                authRepository.createAccount(email, password)
-                onResult(true, null)
+                val user = authRepository.createAccount(email, password, username)
+                onResult(user != null, null)
             } catch (e: Exception) {
-                // Handle error
                 onResult(false, e.message)
             }
         }
     }
-
 }

@@ -8,15 +8,14 @@ import kotlinx.coroutines.launch
 class LoginViewModel : ViewModel() {
     private val authRepository = AuthRepository()
 
-    fun signIn(email: String, password: String, onResult: (isSuccess: Boolean, errorMessage: String?) -> Unit) {
+    fun signIn(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         viewModelScope.launch {
             try {
-                authRepository.signIn(email, password)
-                onResult(true, null)
+                val user = authRepository.signIn(email, password)
+                onResult(user != null, null)
             } catch (e: Exception) {
                 onResult(false, e.message)
             }
         }
     }
-
 }
