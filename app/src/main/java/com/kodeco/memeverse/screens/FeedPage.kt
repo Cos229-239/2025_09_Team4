@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil3.compose.AsyncImage
+import com.kodeco.memeverse.composables.TopAppBar
 
 //Model
 data class Post(val id: Int, val title: String, val imageUrl: String)
@@ -29,9 +30,7 @@ fun FeedScreen(navController: NavController) {
     // Screen Structure
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Feed") }
-            )
+            TopAppBar()
         }
     ) { innerPadding ->
         // Scrolling
