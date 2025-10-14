@@ -27,7 +27,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,22 +38,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import coil3.Uri
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.kodeco.memeverse.composables.TopAppBar
-import com.kodeco.memeverse.screens.add.AddViewModel
 import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 
 @Composable
 fun AddTagScreen(
-    navController: NavHostController,
-    viewModel: AddViewModel = viewModel()
+    imageUri: Uri? = null,
 ) {
-    // Observe the Uri from the viewmodel and set it as a state
-    val imageUri by viewModel.imageUri.collectAsState()
+    val navController = rememberNavController()
     var caption by remember { mutableStateOf("") }
     var tags by remember { mutableStateOf("") }
     // Set the state for the dropdown menu
@@ -105,29 +101,48 @@ fun AddTagScreen(
                         .fillMaxSize()
                         .padding(2.dp, 0.dp, 10.dp, 100.dp)
                 ) {
-                    TextField(
-                        value = caption,
-                        onValueChange = { caption = it },
-                        placeholder = { Text("Caption") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(MaterialTheme.shapes.extraLarge)
-                            .background(MaterialTheme.colorScheme.primaryContainer,
-                                shape = MaterialTheme.shapes.extraLarge),
-                    )
-                    TextField(
-                        value = tags,
-                        onValueChange = { tags = it },
-                        placeholder = { Text("Tags") },
-                        singleLine = true,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 60.dp)
-                            .clip(MaterialTheme.shapes.extraLarge)
-                            .background(MaterialTheme.colorScheme.primaryContainer,
-                                shape = MaterialTheme.shapes.extraLarge),
-                    )
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = "Caption",
+                            color = MaterialTheme.colorScheme.surface,
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier
+                                .padding(5.dp)
+                        )
+                        TextField(
+                            value = caption,
+                            onValueChange = { caption = it },
+                            placeholder = { Text("Enter caption....") },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 5.dp, start = 40.dp, end = 40.dp, bottom = 5.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clip(MaterialTheme.shapes.extraLarge)
+                                .background(MaterialTheme.colorScheme.primaryContainer,
+                                    shape = MaterialTheme.shapes.extraLarge),
+                        )
+                        Text(
+                            text = "Tags",
+                            color = MaterialTheme.colorScheme.surface,
+                            style = MaterialTheme.typography.titleSmall,
+                            modifier = Modifier
+                                .padding(5.dp)
+                        )
+                        TextField(
+                            value = tags,
+                            onValueChange = { tags = it },
+                            placeholder = { Text("#Funny, #ROFL, ect....") },
+                            singleLine = true,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 5.dp, start = 40.dp, end = 40.dp, bottom = 5.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .clip(MaterialTheme.shapes.extraLarge)
+                                .background(MaterialTheme.colorScheme.primaryContainer,
+                                    shape = MaterialTheme.shapes.extraLarge),
+                        )
+                    }
                     Row(
                         modifier = Modifier
                             .padding(start = 10.dp, bottom = 20.dp)
@@ -213,5 +228,5 @@ fun AddTagScreen(
 @Preview
 @Composable
 fun PreviewAddTagScreen() {
-    AddTagScreen(navController = NavHostController(LocalContext.current), viewModel = AddViewModel())
+    AddTagScreen(imageUri = null)
 }

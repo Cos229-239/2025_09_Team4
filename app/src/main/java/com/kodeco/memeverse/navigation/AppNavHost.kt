@@ -2,19 +2,20 @@ package com.kodeco.memeverse.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import coil3.toCoilUri
 import com.kodeco.memeverse.composables.TopBarNavigationDetail
-import com.kodeco.memeverse.screens.add.AddScreen
 import com.kodeco.memeverse.screens.FeedScreen
 import com.kodeco.memeverse.screens.GeneratorScreen
-import com.kodeco.memeverse.screens.login.LoginScreen
 import com.kodeco.memeverse.screens.ProfileScreen
-import com.kodeco.memeverse.screens.signup.SignupScreen
 import com.kodeco.memeverse.screens.TrendingScreen
-import com.kodeco.memeverse.screens.add.AddViewModel
+import com.kodeco.memeverse.screens.add.AddScreen
 import com.kodeco.memeverse.screens.addTag.AddTagScreen
+import com.kodeco.memeverse.screens.login.LoginScreen
+import com.kodeco.memeverse.screens.signup.SignupScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController, padding: PaddingValues) {
@@ -29,6 +30,11 @@ fun AppNavHost(navController: NavHostController, padding: PaddingValues) {
         composable("generator") { GeneratorScreen(navController) }
         composable("profile") { ProfileScreen(navController) }
         composable("trending") { TrendingScreen(navController) }
-        composable("addTag") { AddTagScreen(navController) }
+        composable("addTag") {
+            val mImageUri = navController.previousBackStackEntry?.savedStateHandle?.get<String>("imageUri")
+            AddTagScreen(
+                imageUri = mImageUri?.toUri()?.toCoilUri()
+            )
+        }
     }
 }

@@ -51,9 +51,9 @@ import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 
 @Composable
 fun AddScreen(
-    navController: NavHostController,
-    viewModel: AddViewModel = viewModel()
+    navController: NavHostController
 ) {
+    val viewModel: AddViewModel = viewModel()
     // Hold state for the selected image URI
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     // Determine if the next button should be enabled
@@ -68,6 +68,7 @@ fun AddScreen(
         if (uri != null) {
             Log.d("PhotoPicker", "Selected URI: $uri")
             selectedImageUri = uri
+            // Set the image uri in the viewmodel
             viewModel.setImageUri(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
@@ -89,7 +90,7 @@ fun AddScreen(
                         .height(400.dp)
                         .background(MaterialTheme.colorScheme.primaryContainer)
                         .clickable {
-                            // Launch the photo picker so the user can select a photo from their galery
+                            // Launch the photo picker so the user can select a photo from their gallery
                             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                         }
                 ) {
@@ -173,8 +174,12 @@ fun AddScreen(
                     }
                     Button(
                         onClick = {
-                            if(isNextEnabled && selectedImageUri != null) {
-                                navController.navigate("addTag")
+                            if(isNextEnabled) {
+                                selectedImageUri?.let { uri ->
+                                    // Save the image uri to the back stack so it can be accessed by the next screen
+                                    navController.currentBackStackEntry?.savedStateHandle?.set("imageUri", uri.toString())
+                                    navController.navigate("addTag")
+                                }
                             }
                         },
                         enabled = isNextEnabled,
