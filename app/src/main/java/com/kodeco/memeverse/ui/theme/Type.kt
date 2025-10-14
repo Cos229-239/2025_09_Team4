@@ -24,14 +24,14 @@ val Typography = Typography(
     ),
     titleLarge = TextStyle(
             fontFamily = FontFamily.Serif,
-            fontWeight = FontWeight.Medium,
+            fontWeight = FontWeight.Bold,
             fontSize = 26.sp,
             lineHeight = 24.sp,
             letterSpacing = 0.5.sp
     ),
     titleSmall = TextStyle(
         fontFamily = FontFamily.Serif,
-        fontWeight = FontWeight.Medium,
+        fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 20.sp,
         letterSpacing = 1.sp,
