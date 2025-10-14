@@ -2,6 +2,7 @@ package com.kodeco.memeverse.authentication
 
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
@@ -21,12 +22,7 @@ class AuthRepository {
         }
     }
 
-    suspend fun signIn(email: String, password: String) {
-        try {
-            // Use .await() to handle the asynchronous task
-            auth.signInWithEmailAndPassword(email, password).await()
-        } catch(e: Exception) {
-            Log.e("SignIn", "Something went wrong with sign in. ${e.message}")
-        }
+    suspend fun signIn(email: String, password: String): AuthResult? {
+        return auth.signInWithEmailAndPassword(email, password).await()
     }
 }
