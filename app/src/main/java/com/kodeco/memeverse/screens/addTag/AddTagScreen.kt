@@ -1,6 +1,5 @@
 package com.kodeco.memeverse.screens.addTag
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -36,21 +35,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavController
 import coil3.Uri
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
+import coil3.toAndroidUri
+import com.google.firebase.Timestamp
+import com.kodeco.memeverse.authentication.AuthRepository
 import com.kodeco.memeverse.composables.TopAppBar
+import com.kodeco.memeverse.models.Post
+import com.kodeco.memeverse.screens.add.AddViewModel
 import com.kodeco.memeverse.ui.theme.MemeVerseTheme
 
 @Composable
 fun AddTagScreen(
     imageUri: Uri? = null,
+    viewModel: AddViewModel = AddViewModel(),
+    navController: NavController
 ) {
-    val navController = rememberNavController()
     var caption by remember { mutableStateOf("") }
     var tags by remember { mutableStateOf("") }
     // Set the state for the dropdown menu
@@ -58,6 +62,8 @@ fun AddTagScreen(
     val options = listOf("Public", "Private")
     // set a state variable for the option position
     val itemPosition = remember { mutableStateOf(0) }
+    val repository = AuthRepository()
+    val currentUser = repository.currentUser?.uid
 
     MemeVerseTheme {
         Scaffold(
@@ -189,7 +195,25 @@ fun AddTagScreen(
                         }
                     }
                     Button(
-                        onClick = {},
+                        onClick = {
+                            if(currentUser != null && imageUri != null) {
+                                val post = Post(
+                                    content = caption,
+                                    authorId = currentUser,
+                                    imageUrl = imageUri.toString(),
+                                    isTaggable = true,
+                                    timestamp = Timestamp.now(),
+                                    tags = listOf("TestTag1", "TestTag2", "TestTag3"),
+                                )
+                                viewModel.createPost(post, imageUri.toAndroidUri()) {
+                                    navController.navigate("feed") {
+                                        // Clear the backstack
+                                        popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                                    }
+                                }
+
+                            }
+                        },
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(bottom = 10.dp)
@@ -224,9 +248,10 @@ fun AddTagScreen(
     }
 }
 
-@SuppressLint("ViewModelConstructorInComposable")
-@Preview
-@Composable
-fun PreviewAddTagScreen() {
-    AddTagScreen(imageUri = null)
-}
+//@SuppressLint("ViewModelConstructorInComposable")
+//@Preview
+//@Composable
+//fun PreviewAddTagScreen() {
+//    val navController = rememberNavController()
+//    AddTagScreen(imageUri = null, navController = navController)
+//}
