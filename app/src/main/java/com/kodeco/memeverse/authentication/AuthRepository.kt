@@ -4,6 +4,7 @@ import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
