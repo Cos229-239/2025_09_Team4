@@ -63,7 +63,6 @@ fun AddTagScreen(
     // set a state variable for the option position
     val itemPosition = remember { mutableStateOf(0) }
     val repository = AuthRepository()
-    val currentUser = repository.currentUser?.uid
 
     MemeVerseTheme {
         Scaffold(
@@ -196,6 +195,7 @@ fun AddTagScreen(
                     }
                     Button(
                         onClick = {
+                            val currentUser = repository.currentUser?.uid
                             if(currentUser != null && imageUri != null) {
                                 val parsedTags = tags
                                     // Split tags that are separated by commas or spaces

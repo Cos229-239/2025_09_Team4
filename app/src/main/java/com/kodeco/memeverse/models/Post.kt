@@ -7,8 +7,8 @@ import java.util.UUID
 data class Post(
     // @DocumentId tells firestore to use this field for the document ID
     @DocumentId
-    val authorId: String = "",
     val id: String = UUID.randomUUID().toString(),
+    val authorId: String = "",
     val timestamp: Timestamp? = Timestamp.now(),
     val content: String = "",
     val imageUrl: String? = null,
