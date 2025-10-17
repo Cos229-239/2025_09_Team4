@@ -33,7 +33,9 @@ fun AppNavHost(navController: NavHostController, padding: PaddingValues) {
         composable("addTag") {
             val mImageUri = navController.previousBackStackEntry?.savedStateHandle?.get<String>("imageUri")
             AddTagScreen(
-                imageUri = mImageUri?.toUri()?.toCoilUri()
+                // Pass the local image Uri as a nav parameter
+                imageUri = mImageUri?.toUri()?.toCoilUri(),
+                navController = navController
             )
         }
     }
