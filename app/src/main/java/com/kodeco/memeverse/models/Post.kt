@@ -9,7 +9,7 @@ data class Post(
     @DocumentId
     val authorId: String = "",
     val id: String = UUID.randomUUID().toString(),
-    val timestamp: Timestamp? = null,
+    val timestamp: Timestamp? = Timestamp.now(),
     val content: String = "",
     val imageUrl: String? = null,
     val userImage: String? = null,

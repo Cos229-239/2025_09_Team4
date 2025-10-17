@@ -22,20 +22,13 @@ class AuthRepository {
         get() = auth.currentUser
 
     suspend fun createAccount(email: String, password: String) {
-        try {
-            auth.createUserWithEmailAndPassword(email, password).await()
-        } catch(e: Exception) {
-            Log.e("SignUp", "Something went wrong with sign up. ${e.message}")
-        }
+        // Use firebase to create a user and await the response
+        auth.createUserWithEmailAndPassword(email, password).await()
     }
 
     suspend fun signIn(email: String, password: String) {
-        try {
-            // Use .await() to handle the asynchronous task
-            auth.signInWithEmailAndPassword(email, password).await()
-        } catch(e: Exception) {
-            Log.e("SignIn", "Something went wrong with sign in. ${e.message}")
-        }
+        // Log in with firebase and await the response
+        Firebase.auth.signInWithEmailAndPassword(email, password).await()
     }
 
     // Uploads an image to the Firebase Storage and returns the public download URL

@@ -197,15 +197,21 @@ fun AddTagScreen(
                     Button(
                         onClick = {
                             if(currentUser != null && imageUri != null) {
+                                val parsedTags = tags
+                                    // Split tags that are separated by commas or spaces
+                                    .split(Regex("[,\\s]+"))
+                                    // Filter out empty tags
+                                    .filter { it.isNotEmpty() }
                                 val post = Post(
                                     content = caption,
                                     authorId = currentUser,
                                     imageUrl = imageUri.toString(),
                                     isTaggable = true,
                                     timestamp = Timestamp.now(),
-                                    tags = listOf("TestTag1", "TestTag2", "TestTag3"),
+                                    tags = parsedTags,
                                 )
                                 viewModel.createPost(post, imageUri.toAndroidUri()) {
+                                    // Post created successfully, navigate back to the feed screen
                                     navController.navigate("feed") {
                                         // Clear the backstack
                                         popUpTo(navController.graph.startDestinationId) { inclusive = true }
