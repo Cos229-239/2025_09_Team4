@@ -32,8 +32,10 @@ fun SignupScreen(
     navController: NavController,
     signUpViewModel: SignupViewModel = viewModel()
 ) {
-    var email by remember { mutableStateOf("") }
+    var name by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var dob by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
@@ -41,8 +43,8 @@ fun SignupScreen(
 
     val context = LocalContext.current
     val passwordsMatch = password == confirmPassword
-    val isSignupEnabled = email.isNotBlank() && username.isNotBlank() &&
-            password.isNotBlank() && confirmPassword.isNotBlank() && passwordsMatch
+    val isSignupEnabled = name.isNotBlank() && username.isNotBlank() && email.isNotBlank() &&
+            dob.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank() && passwordsMatch
 
     Row(
         modifier = Modifier
@@ -71,20 +73,42 @@ fun SignupScreen(
                     .padding(bottom = 16.dp)
             )
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = "Sign up to share and store all your favorite memes",
-                    color = Color.White,
-                    textAlign = TextAlign.Center
-                )
-            }
+            Text(
+                text = "Sign up to share and store all your favorite memes",
+                color = Color.White,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
 
             Spacer(Modifier.height(32.dp))
+
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                placeholder = { Text("Full Name") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = textFieldColors()
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            TextField(
+                value = username,
+                onValueChange = { username = it },
+                placeholder = { Text("Username") },
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White, shape = MaterialTheme.shapes.extraLarge),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = textFieldColors()
+            )
+
+            Spacer(Modifier.height(16.dp))
 
             TextField(
                 value = email,
@@ -101,9 +125,9 @@ fun SignupScreen(
             Spacer(Modifier.height(16.dp))
 
             TextField(
-                value = username,
-                onValueChange = { username = it },
-                placeholder = { Text("Username") },
+                value = dob,
+                onValueChange = { dob = it },
+                placeholder = { Text("Date of Birth") },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()

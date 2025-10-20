@@ -2,6 +2,7 @@
   <dictionary name="project">
     <words>
       <w>authapp</w>
+      <w>snackbar</w>
     </words>
   </dictionary>
 </component>
