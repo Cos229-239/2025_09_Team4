@@ -2,6 +2,7 @@ package com.kodeco.memeverse.models
 
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.Exclude
 import java.util.UUID
 
 data class Post(
@@ -15,7 +16,9 @@ data class Post(
     val userImage: String? = null,
     val isTaggable: Boolean = false,
     val tags: List<String> = emptyList(),
-    val likedBy : MutableList<String> = mutableListOf()
+    val likedBy : MutableList<String> = mutableListOf(),
+    @get:Exclude
+    var username: String = ""
 ){
     val likes: Int
         get() = likedBy.size

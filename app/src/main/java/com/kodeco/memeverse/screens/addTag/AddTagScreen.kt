@@ -63,7 +63,7 @@ fun AddTagScreen(
     // set a state variable for the option position
     val itemPosition = remember { mutableStateOf(0) }
     val repository = AuthRepository()
-    val currentUser = repository.currentUser?.uid
+    val currentUser = repository.currentUser
 
     MemeVerseTheme {
         Scaffold(
@@ -204,7 +204,7 @@ fun AddTagScreen(
                                     .filter { it.isNotEmpty() }
                                 val post = Post(
                                     content = caption,
-                                    authorId = currentUser,
+                                    authorId = currentUser.uid,
                                     imageUrl = imageUri.toString(),
                                     isTaggable = true,
                                     timestamp = Timestamp.now(),

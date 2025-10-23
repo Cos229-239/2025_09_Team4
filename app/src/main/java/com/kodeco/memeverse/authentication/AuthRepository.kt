@@ -10,6 +10,8 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.storage
 import com.kodeco.memeverse.models.Post
+import com.kodeco.memeverse.models.User
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.tasks.await
 import java.util.UUID
 
@@ -21,9 +23,26 @@ class AuthRepository {
     val currentUser: FirebaseUser?
         get() = auth.currentUser
 
-    suspend fun createAccount(email: String, password: String) {
+    suspend fun createAccount(email: String, password: String, username: String) {
         // Use firebase to create a user and await the response
-        auth.createUserWithEmailAndPassword(email, password).await()
+        val authResult = auth.createUserWithEmailAndPassword(email, password).await()
+        // Get the user from the authResult
+        val firebaseUser = authResult.user
+        if (firebaseUser != null) {
+            // User is successfully created with firebase
+            val newUser = User(
+                id = firebaseUser.uid,
+                username = username,
+                email = email
+            )
+            // Save the user object to the users database
+            database.collection("users")
+                .document(firebaseUser.uid)
+                .set(newUser)
+                .await()
+        } else {
+            throw IllegalStateException("Firebase User is null after creating an account")
+        }
     }
 
     suspend fun signIn(email: String, password: String) {
@@ -57,24 +76,52 @@ class AuthRepository {
     }
 
     // Load the posts from the database
-    fun loadPosts(onPostsLoaded: (List<Post>) -> Unit) {
-            val postCollectionRef = database.collection("posts")
+    suspend fun loadPosts(onPostsLoaded: (List<Post>) -> Unit) {
+        try {
+            val postCollection = database.collection("posts")
                 .get()
-                .addOnSuccessListener { documents ->
-                    val posts = mutableListOf<Post>()
-                    for (document in documents ) {
-                        // Convert the document to a Post object
-                        val post = document.toObject(Post::class.java)
-                        // Set the document id
-                        post.id = document.id
-                        // Add each post to the list
-                        posts.add(post)
-                        Log.d(TAG, "${document.id} => ${document.data}")
+                .await()
+            val posts = postCollection.toObjects(Post::class.java)
+            val postsWithUsername = posts.map { post ->
+                coroutineScope {
+                    if (post.authorId.isNotEmpty()) {
+                        try {
+                            val userDocument = database.collection("users")
+                                .document(post.authorId)
+                                .get()
+                                .await()
+                            post.username = userDocument.getString("username") ?: "Unknown"
+                        } catch (e: Exception) {
+                            Log.w("AuthRepository", "Error getting documents: ${e}")
+                            post.username = "Unknown"
+                        }
                     }
-                    onPostsLoaded(posts)
+                    post
                 }
-                .addOnFailureListener { exception ->
-                    Log.w("AuthRepository", "Error getting documents: ${exception}")
-                }
+            }
+            onPostsLoaded(postsWithUsername)
+
+        } catch (e: Exception) {
+            Log.w("AuthRepository", "Error getting documents: ${e}")
+            emptyList<Post>()
+        }
+//            val postCollectionRef = database.collection("posts")
+//                .get()
+//                .addOnSuccessListener { documents ->
+//                    val posts = mutableListOf<Post>()
+//                    for (document in documents ) {
+//                        // Convert the document to a Post object
+//                        val post = document.toObject(Post::class.java)
+//                        // Set the document id
+//                        post.id = document.id
+//                        // Add each post to the list
+//                        posts.add(post)
+//                        Log.d(TAG, "${document.id} => ${document.data}")
+//                    }
+//                    onPostsLoaded(posts)
+//                }
+//                .addOnFailureListener { exception ->
+//                    Log.w("AuthRepository", "Error getting documents: ${exception}")
+//                }
         }
 }

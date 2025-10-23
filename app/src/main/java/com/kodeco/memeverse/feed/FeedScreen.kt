@@ -55,7 +55,7 @@ fun PostItem(post: Post) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Todo: Add author username and profile picture
-            Text(text = post.authorId)
+            Text(text = post.username)
             post.imageUrl?.let { imageUrl ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
