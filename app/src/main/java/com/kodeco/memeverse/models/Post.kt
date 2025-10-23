@@ -17,28 +17,23 @@ data class Post(
     val tags: List<String> = emptyList(),
     val likedBy : MutableList<String> = mutableListOf()
 ){
+    // Private value to store the number of likes
+    private val _likedBy: MutableList<String> = mutableListOf()
     val likes: Int
         get() = _likedBy.size
+    // Public getter to expose the number of likes outside the class
+    val mlikedBy: MutableList<String>
+        get() = _likedBy.toMutableList()
 
-    // Public read-only access
-    val likedBy: List<String>
-        get() = _likedBy.toList()
-
-    fun like(userId: String): Boolean {
-        return if (!_likedBy.contains(userId)) {
-            _likedBy.add(userId)
-            true
-        } else {
-            false
-        }
-    }
-
-    fun unlike(userId: String): Boolean {
-        return if (_likedBy.contains(userId)) {
+    fun likeUnlike(userId: String): Boolean {
+        // User has already liked the post, remove them from the list
+        if (_likedBy.contains(userId)) {
             _likedBy.remove(userId)
-            true
+            return false
         } else {
-            false
+            // User has not liked the post, add them to the list
+            _likedBy.add(userId)
+            return true
         }
     }
 }
