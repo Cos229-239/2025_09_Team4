@@ -4,7 +4,6 @@ import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
 import com.google.firebase.Firebase
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
@@ -46,7 +45,7 @@ class AuthRepository {
     }
 
     // Adds a post to the database
-    fun addPost(post: Post) {
+    suspend fun addPost(post: Post) {
         database.collection("posts")
             .add(post)
             .addOnSuccessListener { documentReference ->
@@ -56,4 +55,26 @@ class AuthRepository {
                 Log.w(TAG, "Error adding document", e)
             }
     }
+
+    // Load the posts from the database
+    fun loadPosts(onPostsLoaded: (List<Post>) -> Unit) {
+            val postCollectionRef = database.collection("posts")
+                .get()
+                .addOnSuccessListener { documents ->
+                    val posts = mutableListOf<Post>()
+                    for (document in documents ) {
+                        // Convert the document to a Post object
+                        val post = document.toObject(Post::class.java)
+                        // Set the document id
+                        post.id = document.id
+                        // Add each post to the list
+                        posts.add(post)
+                        Log.d(TAG, "${document.id} => ${document.data}")
+                    }
+                    onPostsLoaded(posts)
+                }
+                .addOnFailureListener { exception ->
+                    Log.w("AuthRepository", "Error getting documents: ${exception}")
+                }
+        }
 }
