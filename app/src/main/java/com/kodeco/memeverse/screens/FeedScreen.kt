@@ -1,7 +1,6 @@
 package com.kodeco.memeverse.screens
 
 //Libraries
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
