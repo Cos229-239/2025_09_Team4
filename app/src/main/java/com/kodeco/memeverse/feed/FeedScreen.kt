@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,7 +56,12 @@ fun PostItem(post: Post) {
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             // Todo: Add author username and profile picture
-            Text(text = post.username)
+            Text(
+                text = post.username,
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.surface,
+                modifier = Modifier.padding(bottom = 8.dp)
+                )
             post.imageUrl?.let { imageUrl ->
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
@@ -66,7 +72,7 @@ fun PostItem(post: Post) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(400.dp),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Fit
                 )
             }
             Text(text = post.content)

@@ -96,6 +96,7 @@ class AuthRepository {
                             post.username = "Unknown"
                         }
                     }
+                    // Return the modified post object
                     post
                 }
             }
