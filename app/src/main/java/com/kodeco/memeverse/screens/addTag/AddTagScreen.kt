@@ -63,6 +63,7 @@ fun AddTagScreen(
     // set a state variable for the option position
     val itemPosition = remember { mutableStateOf(0) }
     val repository = AuthRepository()
+    val currentUser = repository.currentUser
 
     MemeVerseTheme {
         Scaffold(
@@ -253,11 +254,3 @@ fun AddTagScreen(
         }
     }
 }
-
-//@SuppressLint("ViewModelConstructorInComposable")
-//@Preview
-//@Composable
-//fun PreviewAddTagScreen() {
-//    val navController = rememberNavController()
-//    AddTagScreen(imageUri = null, navController = navController)
-//}

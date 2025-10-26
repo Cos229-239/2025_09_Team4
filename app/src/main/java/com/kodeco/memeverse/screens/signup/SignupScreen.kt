@@ -170,7 +170,7 @@ fun SignupScreen(
 
         Button(
             onClick = {
-                signUpViewModel.createAccount(email, password) { isSuccess, errorMessage ->
+                signUpViewModel.createAccount(email, password, username) { isSuccess, errorMessage ->
                     if (isSuccess) {
                         Toast.makeText(
                             context,

@@ -9,10 +9,10 @@ class SignUpViewModel : ViewModel() {
 
     private val authRepository = AuthRepository()
 
-    fun createAccount(email: String, password: String, onResult: (isSuccess: Boolean, errorMessage: String?)-> Unit) {
+    fun createAccount(email: String, password: String, username: String, onResult: (isSuccess: Boolean, errorMessage: String?)-> Unit) {
         viewModelScope.launch {
             try {
-                authRepository.createAccount(email, password)
+                val authResult = authRepository.createAccount(email, password, username)
                 onResult(true, null)
             } catch (e: Exception) {
                 // Handle error

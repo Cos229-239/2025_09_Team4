@@ -13,6 +13,8 @@ google-services.json
 
 # Ignore all files in the .idea folder
 .idea/
+.idea/deploymentTargetSelector.xml
+.idea/misc.xml
 
 # Except these files, which can be shared
 !.idea/modules.xml

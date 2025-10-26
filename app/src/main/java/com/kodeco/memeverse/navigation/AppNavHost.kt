@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import coil3.toCoilUri
 import com.kodeco.memeverse.composables.TopBarNavigationDetail
-import com.kodeco.memeverse.screens.FeedScreen
+import com.kodeco.memeverse.screens.feed.FeedScreen
 import com.kodeco.memeverse.screens.GeneratorScreen
 import com.kodeco.memeverse.screens.ProfileScreen
 import com.kodeco.memeverse.screens.TrendingScreen
