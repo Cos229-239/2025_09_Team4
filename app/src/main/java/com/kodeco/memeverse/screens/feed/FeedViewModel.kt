@@ -1,4 +1,4 @@
-package com.kodeco.memeverse.feed
+package com.kodeco.memeverse.screens.feed
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

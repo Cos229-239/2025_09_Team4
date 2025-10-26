@@ -1,4 +1,4 @@
-package com.kodeco.memeverse.feed
+package com.kodeco.memeverse.screens.feed
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
