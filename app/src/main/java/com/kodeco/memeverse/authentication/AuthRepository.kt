@@ -106,23 +106,5 @@ class AuthRepository {
             Log.w("AuthRepository", "Error getting documents: ${e}")
             emptyList<Post>()
         }
-//            val postCollectionRef = database.collection("posts")
-//                .get()
-//                .addOnSuccessListener { documents ->
-//                    val posts = mutableListOf<Post>()
-//                    for (document in documents ) {
-//                        // Convert the document to a Post object
-//                        val post = document.toObject(Post::class.java)
-//                        // Set the document id
-//                        post.id = document.id
-//                        // Add each post to the list
-//                        posts.add(post)
-//                        Log.d(TAG, "${document.id} => ${document.data}")
-//                    }
-//                    onPostsLoaded(posts)
-//                }
-//                .addOnFailureListener { exception ->
-//                    Log.w("AuthRepository", "Error getting documents: ${exception}")
-//                }
-        }
+    }
 }
