@@ -2,14 +2,16 @@ package com.kodeco.memeverse.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Red = Color(0xFFb3261E)
 
 val BluePrimary = Color(0xFF5CB9FF)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
 
-val black = Color(0xFF000000)
+val LightGray = Color(0XFFD9D9D9)
 
-val white = Color(0xFFFFFFFF)
+val DarkGray = Color(0xFF475467)
+
+val LightTeal = Color(0xFF077F8F)
+
+val Black = Color(0xFF000000)
+
+val White = Color(0xFFFFFFFF)

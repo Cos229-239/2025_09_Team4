@@ -17,7 +17,7 @@ data class Comment(
         postID = postID,
         userID  = user.id,
         username = user.username,
-        userAvatarUrl = user.avatarUrl,
+        userAvatarUrl = user.avatarUri,
         content = content
     )
 }
