@@ -196,6 +196,7 @@ fun AddTagScreen(
                     }
                     Button(
                         onClick = {
+                            val currentUser = repository.currentUser?.uid
                             if(currentUser != null && imageUri != null) {
                                 val parsedTags = tags
                                     // Split tags that are separated by commas or spaces
@@ -204,7 +205,7 @@ fun AddTagScreen(
                                     .filter { it.isNotEmpty() }
                                 val post = Post(
                                     content = caption,
-                                    authorId = currentUser.uid,
+                                    authorId = currentUser,
                                     imageUrl = imageUri.toString(),
                                     isTaggable = true,
                                     timestamp = Timestamp.now(),
@@ -253,11 +254,3 @@ fun AddTagScreen(
         }
     }
 }
-
-//@SuppressLint("ViewModelConstructorInComposable")
-//@Preview
-//@Composable
-//fun PreviewAddTagScreen() {
-//    val navController = rememberNavController()
-//    AddTagScreen(imageUri = null, navController = navController)
-//}
